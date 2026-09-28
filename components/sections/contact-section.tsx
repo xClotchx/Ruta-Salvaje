@@ -1,119 +1,125 @@
 'use client';
 
-import { motion } from 'framer-motion';
-import {
-  Instagram,
-  Music2,
-  Mail,
-  ArrowUpRight,
-  Compass,
-} from 'lucide-react';
-import { MagneticButton } from "../interactive/magnetic-button";
+import { useState } from 'react';
+import { ArrowUpRight, Instagram, Mountain, Music2 } from 'lucide-react';
 
 const socials = [
-  {
-    label: 'Instagram',
-    handle: '@x_.emcc._x',
-    icon: Instagram,
-    accent: 'text-magenta',
-    href: 'https://www.instagram.com/x_.emcc._x?stkn=MTNmZjlrc2Vwcmxqdw%3D%3D&utm_source=qr',
-  },
-  {
-    label: 'Tiktok',
-    handle: '@x_emcc_x',
-    icon: Music2,
-    accent: 'text-cyan',
-    href: 'https://www.tiktok.com/@x_emcc_x', // Agregué un enlace base de TikTok, puedes ajustarlo si lo deseas
-  },
+  { label: 'Instagram', handle: '@x_.emcc._x', icon: Instagram, href: 'https://www.instagram.com/x_.emcc._x' },
+  { label: 'TikTok', handle: '@x_emcc_x', icon: Music2, href: 'https://www.tiktok.com/@x_emcc_x' },
 ];
 
+// type Status = 'idle' | 'sending' | 'ok' | 'error';
+
 export function ContactSection() {
+  /* Estados y función comentados para evitar errores de TypeScript por variables no utilizadas
+  const [status, setStatus] = useState<Status>('idle');
+  const [error, setError] = useState('');
+
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const form = e.currentTarget;
+    const data = Object.fromEntries(new FormData(form).entries());
+    setStatus('sending');
+    setError('');
+    try {
+      const res = await fetch('/api/sugerencias', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+      const json = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(json.error || 'No se pudo enviar. Inténtalo de nuevo.');
+      form.reset();
+      setStatus('ok');
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'No se pudo enviar. Inténtalo de nuevo.');
+      setStatus('error');
+    }
+  };
+  */
+
   return (
-    <section
-      id="contacto"
-      className="grain relative w-full overflow-hidden bg-background py-20 sm:py-28"
-    >
-      <div className="absolute left-1/2 top-1/2 h-[500px] w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-gradient-radial from-lime/5 via-transparent to-transparent blur-3xl" />
+    <section id="contacto" className="relative w-full py-20 sm:py-28">
+      <div className="mx-auto max-w-6xl px-6">
+        <h2 className="font-display text-4xl font-light sm:text-6xl">Sigue la ruta</h2>
+        <p className="mt-3 max-w-md text-muted-foreground">
+          Las salidas nuevas se publican primero en redes.
+        </p>
 
-      <div className="relative z-10 mx-auto max-w-7xl px-6">
-        <div className="mb-12">
-          <span className="font-mono-tech text-xs uppercase tracking-[0.3em] text-cyan">
-            [ 03 ] Redes
-          </span>
-          <h2 className="mt-3 font-display text-4xl font-bold tracking-tight sm:text-6xl">
-            Mira mis <span className="text-glow-lime text-lime">aventuras</span>
-          </h2>
-        </div>
-
-        <div className="grid gap-4 lg:grid-cols-3">
-          {socials.map((s, i) => {
-            const SIcon = s.icon;
-            return (
-              <motion.div
-                key={s.label}
-                initial={{ opacity: 0, y: 40 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: '-50px' }}
-                transition={{ duration: 0.5, delay: i * 0.1 }}
-              >
-                {/* Enlace envolvente para que la tarjeta sea clickeable */}
+        <div className="mt-10 grid gap-4 lg:grid-cols-1">
+          <div className="grid content-start gap-4 max-w-xl">
+            {socials.map((s) => {
+              const SIcon = s.icon;
+              return (
                 <a
+                  key={s.label}
                   href={s.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="block w-full focus:outline-none"
+                  className="glass-strong group flex items-center gap-4 rounded-3xl p-5 transition-transform active:scale-[0.98]"
                 >
-                  <MagneticButton
-                    strength={0.15}
-                    className="group block w-full rounded-3xl glass-strong p-6 text-left pointer-events-none"
-                  >
-                    <div className="flex items-start justify-between">
-                      <div
-                        className={`flex h-12 w-12 items-center justify-center rounded-2xl glass`}
-                      >
-                        <SIcon className={`h-6 w-6 ${s.accent}`} />
-                      </div>
-                      <ArrowUpRight
-                        className={`h-5 w-5 text-muted-foreground transition-all group-hover:-translate-y-1 group-hover:translate-x-1 ${s.accent}`}
-                      />
-                    </div>
-                    <div className="mt-4">
-                      <div className="font-mono-tech text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
-                        {s.label}
-                      </div>
-                      <div className="mt-1 font-display text-xl font-bold">
-                        {s.handle}
-                      </div>
-                    </div>
-                    {/* Glow line */}
-                    <div
-                      className={`mt-4 h-px w-full origin-left scale-x-0 transition-transform duration-300 group-hover:scale-x-100 ${
-                        s.accent === 'text-lime'
-                          ? 'bg-lime'
-                          : s.accent === 'text-cyan'
-                            ? 'bg-cyan'
-                            : 'bg-magenta'
-                      }`}
-                    />
-                  </MagneticButton>
+                  <span className="glass flex h-14 w-14 items-center justify-center rounded-2xl">
+                    <SIcon className="h-6 w-6 text-water" aria-hidden />
+                  </span>
+                  <span className="min-w-0 flex-1">
+                    <span className="block text-sm text-muted-foreground">{s.label}</span>
+                    <span className="block truncate font-display text-xl font-semibold">{s.handle}</span>
+                  </span>
+                  <ArrowUpRight className="h-5 w-5 text-muted-foreground transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" aria-hidden />
                 </a>
-              </motion.div>
-            );
-          })}
+              );
+            })}
+          </div>
+
+          {/* 
+          --- FORMULARIO COMENTADO ---
+          <form onSubmit={onSubmit} className="glass-strong rounded-3xl p-6" noValidate>
+            <h3 className="font-display text-2xl font-semibold">¿Conoces un lugar que debería visitar?</h3>
+            <p className="mt-1 text-sm text-muted-foreground">Cuéntame dónde queda y por qué vale la pena.</p>
+
+            <div className="mt-5 grid gap-3">
+              <label className="grid gap-1.5 text-sm font-semibold">
+                Lugar
+                <input name="lugar" required minLength={3} maxLength={120} autoComplete="off" placeholder="Cascada, sendero o mirador" className={field} />
+              </label>
+              <label className="grid gap-1.5 text-sm font-semibold">
+                Detalles <span className="font-normal text-muted-foreground">(opcional)</span>
+                <textarea name="mensaje" rows={3} maxLength={500} placeholder="Cómo llegar, dificultad, qué hay de especial" className={`${field} resize-none`} />
+              </label>
+              <label className="grid gap-1.5 text-sm font-semibold">
+                Tu nombre <span className="font-normal text-muted-foreground">(opcional)</span>
+                <input name="nombre" maxLength={60} autoComplete="name" className={field} />
+              </label>
+              <input name="website" tabIndex={-1} autoComplete="off" aria-hidden className="absolute -left-[9999px] h-0 w-0 opacity-0" />
+            </div>
+
+            <button
+              type="submit"
+              disabled={status === 'sending'}
+              className="mt-5 flex h-14 w-full items-center justify-center gap-2 rounded-2xl bg-quetzal text-base font-bold text-background transition-transform active:scale-[0.98] disabled:opacity-70"
+            >
+              {status === 'sending' ? <Loader2 className="h-5 w-5 animate-spin" aria-hidden /> : <Send className="h-5 w-5" aria-hidden />}
+              {status === 'sending' ? 'Enviando' : 'Enviar sugerencia'}
+            </button>
+
+            <p role="status" aria-live="polite" className="mt-3 min-h-6 text-sm">
+              {status === 'ok' && (
+                <span className="flex items-center gap-2 text-water">
+                  <Check className="h-4 w-4" aria-hidden /> Recibido. Gracias por el dato.
+                </span>
+              )}
+              {status === 'error' && <span className="text-destructive">{error}</span>}
+            </p>
+          </form> 
+          */}
         </div>
 
-        {/* Footer */}
-        <div className="mt-16 flex flex-col items-center gap-4 border-t border-border/50 pt-8">
-          <div className="flex items-center gap-2">
-            <Compass className="h-4 w-4 text-lime" />
-            <span className="font-display text-lg font-bold tracking-tight">
-              Ruta Salvaje
-            </span>
-          </div>
-          <p className="font-mono-tech text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
-            Registro de exploración · EMCC
-          </p>
-        </div>
+        <footer className="mt-20 flex flex-col items-center gap-3 border-t border-border/50 pt-8 text-center">
+          <span className="flex items-center gap-2 font-display text-lg font-semibold">
+            <Mountain className="h-4 w-4 text-water" aria-hidden /> Ruta Salvaje
+          </span>
+          <p className="text-sm text-muted-foreground">Registro de exploración de EMCC</p>
+        </footer>
       </div>
     </section>
   );

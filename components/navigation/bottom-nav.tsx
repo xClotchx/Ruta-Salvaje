@@ -1,41 +1,31 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Home, Images, Map, Mail, Compass } from 'lucide-react';
+import { Home, Mountain, Map, Send } from 'lucide-react';
+import { useActiveSection } from '@/hooks/use-active-section';
 
 const navItems = [
   { id: 'inicio', label: 'Inicio', icon: Home },
-  { id: 'galeria', label: 'Galería', icon: Images },
+  { id: 'rutas', label: 'Rutas', icon: Mountain },
   { id: 'mapa', label: 'Mapa', icon: Map },
-  { id: 'contacto', label: 'Contacto', icon: Mail },
-];
+  { id: 'contacto', label: 'Contacto', icon: Send },
+] as const;
+const ids = navItems.map((n) => n.id);
 
 export function BottomNav() {
-  const [active, setActive] = useState('inicio');
+  const active = useActiveSection(ids);
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => {
-      setVisible(window.scrollY > 200);
-
-      const sections = navItems.map((n) => document.getElementById(n.id));
-      const scrollPos = window.scrollY + window.innerHeight / 3;
-
-      for (let i = sections.length - 1; i >= 0; i--) {
-        const sec = sections[i];
-        if (sec && sec.offsetTop <= scrollPos) {
-          setActive(navItems[i].id);
-          break;
-        }
-      }
-    };
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    handleScroll();
-    return () => window.removeEventListener('scroll', handleScroll);
+    const onScroll = () => setVisible(window.scrollY > 240);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  const scrollTo = (id: string) => {
+  const go = (id: string) => {
+    if ('vibrate' in navigator) navigator.vibrate(8);
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
   };
 
@@ -43,43 +33,38 @@ export function BottomNav() {
     <AnimatePresence>
       {visible && (
         <motion.nav
-          initial={{ y: 100, opacity: 0 }}
+          aria-label="Navegación principal"
+          initial={{ y: 90, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
-          exit={{ y: 100, opacity: 0 }}
-          transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-          className="fixed bottom-4 left-1/2 z-40 -translate-x-1/2 lg:hidden"
+          exit={{ y: 90, opacity: 0 }}
+          transition={{ type: 'spring', stiffness: 320, damping: 30 }}
+          className="fixed bottom-[max(0.75rem,env(safe-area-inset-bottom))] left-1/2 z-40 -translate-x-1/2 lg:hidden"
         >
-          <div className="flex items-center gap-1 rounded-full glass-strong p-1.5 shadow-[0_8px_40px_hsl(0_0%_0%/0.5)]">
-            {/* Logo dot */}
-            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-lime text-background">
-              <Compass className="h-5 w-5" />
-            </div>
-            <div className="mx-0.5 h-6 w-px bg-foreground/10" />
+          <div className="glass-strong flex items-center gap-1 rounded-full p-1.5">
             {navItems.map((item) => {
               const Icon = item.icon;
               const isActive = active === item.id;
               return (
                 <motion.button
                   key={item.id}
-                  onClick={() => scrollTo(item.id)}
-                  whileTap={{ scale: 0.85 }}
-                  className="relative flex h-11 w-11 items-center justify-center rounded-full"
+                  layout
+                  onClick={() => go(item.id)}
+                  whileTap={{ scale: 0.92 }}
                   aria-label={item.label}
+                  aria-current={isActive ? 'page' : undefined}
+                  className="relative flex h-12 min-w-12 items-center justify-center gap-2 rounded-full px-3.5"
                 >
                   {isActive && (
-                    <motion.div
-                      layoutId="nav-active"
-                      className="absolute inset-0 rounded-full bg-lime/15"
-                      transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+                    <motion.span
+                      layoutId="dock-pill"
+                      className="absolute inset-0 rounded-full bg-white/[0.13] ring-1 ring-white/20"
+                      transition={{ type: 'spring', stiffness: 420, damping: 32 }}
                     />
                   )}
-                  <Icon
-                    className={`relative h-5 w-5 transition-colors ${
-                      isActive
-                        ? 'text-lime'
-                        : 'text-muted-foreground'
-                    }`}
-                  />
+                  <Icon className={`relative h-5 w-5 ${isActive ? 'text-water' : 'text-muted-foreground'}`} />
+                  {isActive && (
+                    <span className="relative text-sm font-semibold text-foreground">{item.label}</span>
+                  )}
                 </motion.button>
               );
             })}

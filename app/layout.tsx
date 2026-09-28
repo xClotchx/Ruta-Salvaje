@@ -1,50 +1,40 @@
 import './globals.css';
 import type { Metadata } from 'next';
-import { Space_Grotesk, JetBrains_Mono } from 'next/font/google';
+import { Fraunces, Manrope } from 'next/font/google';
+import { adventures, optimized } from '../lib/adventures';
 
-const spaceGrotesk = Space_Grotesk({
-  subsets: ['latin'],
-  variable: '--font-display',
-  display: 'swap',
-});
+const fraunces = Fraunces({ subsets: ['latin'], variable: '--font-display', display: 'swap' });
+const manrope = Manrope({ subsets: ['latin'], variable: '--font-body', display: 'swap' });
 
-const jetbrainsMono = JetBrains_Mono({
-  subsets: ['latin'],
-  variable: '--font-mono',
-  display: 'swap',
-});
+const siteUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL
+  ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+  : 'http://localhost:3000';
+
+const title = 'Ruta Salvaje — Cascadas, senderos y montañas de Chiriquí';
+const description =
+  'Diario de exploración por Chiriquí, Panamá: cascadas, senderos y volcanes con fotos, datos de cada ruta y enlaces directos a Google Maps.';
 
 export const metadata: Metadata = {
-  title: 'Ruta Salvaje — Registro de Exploración',
-  description:
-    'Diario inmersivo de exploración de cascadas, senderos y ríos. Una experiencia visual vanguardista del viaje hacia lo desconocido.',
+  metadataBase: new URL(siteUrl),
+  title,
+  description,
+  themeColor: '#061210',
+  robots: { index: true, follow: true },
+  viewport: 'width=device-width, initial-scale=1, viewport-fit=cover',
   openGraph: {
-    title: 'Ruta Salvaje — Registro de Exploración',
-    description:
-      'Diario inmersivo de exploración de cascadas, senderos y ríos.',
+    title,
+    description,
     type: 'website',
+    locale: 'es_PA',
+    images: [{ url: optimized(adventures[0].image, 1080, 70), width: 1080, height: 810 }],
   },
-  themeColor: '#0a0f0c',
-  viewport: {
-    width: 'device-width',
-    initialScale: 1,
-    maximumScale: 1,
-    userScalable: false,
-  },
+  twitter: { card: 'summary_large_image', title, description },
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="es" className="dark">
-      <body
-        className={`${spaceGrotesk.variable} ${jetbrainsMono.variable} antialiased`}
-      >
-        {children}
-      </body>
+      <body className={`${fraunces.variable} ${manrope.variable} antialiased`}>{children}</body>
     </html>
   );
 }

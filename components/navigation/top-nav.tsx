@@ -1,43 +1,30 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Compass } from 'lucide-react';
+import { Mountain } from 'lucide-react';
+import { useActiveSection } from '@/hooks/use-active-section';
 
 const navItems = [
   { id: 'inicio', label: 'Inicio' },
-  { id: 'galeria', label: 'Galería' },
+  { id: 'rutas', label: 'Rutas' },
   { id: 'mapa', label: 'Mapa' },
   { id: 'contacto', label: 'Contacto' },
-];
+] as const;
+const ids = navItems.map((n) => n.id);
 
 export function TopNav() {
+  const active = useActiveSection(ids);
   const [scrolled, setScrolled] = useState(false);
-  const [active, setActive] = useState('inicio');
 
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 60);
-
-      const sections = navItems.map((n) => document.getElementById(n.id));
-      const scrollPos = window.scrollY + window.innerHeight / 3;
-
-      for (let i = sections.length - 1; i >= 0; i--) {
-        const sec = sections[i];
-        if (sec && sec.offsetTop <= scrollPos) {
-          setActive(navItems[i].id);
-          break;
-        }
-      }
-    };
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    handleScroll();
-    return () => window.removeEventListener('scroll', handleScroll);
+    const onScroll = () => setScrolled(window.scrollY > 60);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  const scrollTo = (id: string) => {
-    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
-  };
+  const go = (id: string) => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
 
   return (
     <AnimatePresence>
@@ -49,42 +36,36 @@ export function TopNav() {
           transition={{ type: 'spring', stiffness: 300, damping: 30 }}
           className="fixed left-1/2 top-4 z-40 hidden -translate-x-1/2 lg:block"
         >
-          <div className="flex items-center gap-1 rounded-full glass-strong px-2 py-2">
-            <button
-              onClick={() => scrollTo('inicio')}
-              className="flex items-center gap-2 rounded-full px-3 py-1.5"
-            >
-              <Compass className="h-4 w-4 text-lime" />
-              <span className="font-display text-sm font-bold tracking-tight">
-                Ruta Salvaje
-              </span>
+          <nav aria-label="Navegación principal" className="glass-strong flex items-center gap-1 rounded-full px-2 py-2">
+            <button onClick={() => go('inicio')} className="flex items-center gap-2 rounded-full px-3 py-1.5">
+              <Mountain className="h-4 w-4 text-water" />
+              <span className="font-display text-base font-semibold">Ruta Salvaje</span>
             </button>
             <div className="mx-1 h-6 w-px bg-foreground/10" />
             {navItems.map((item) => (
               <button
                 key={item.id}
-                onClick={() => scrollTo(item.id)}
+                onClick={() => go(item.id)}
+                aria-current={active === item.id ? 'page' : undefined}
                 className="relative rounded-full px-4 py-1.5"
               >
                 {active === item.id && (
-                  <motion.div
+                  <motion.span
                     layoutId="topnav-active"
-                    className="absolute inset-0 rounded-full bg-lime/15"
+                    className="absolute inset-0 rounded-full bg-white/[0.12] ring-1 ring-white/15"
                     transition={{ type: 'spring', stiffness: 400, damping: 30 }}
                   />
                 )}
                 <span
-                  className={`relative font-mono-tech text-xs uppercase tracking-wider transition-colors ${
-                    active === item.id
-                      ? 'text-lime'
-                      : 'text-muted-foreground hover:text-foreground'
+                  className={`relative text-sm font-semibold transition-colors ${
+                    active === item.id ? 'text-water' : 'text-muted-foreground hover:text-foreground'
                   }`}
                 >
                   {item.label}
                 </span>
               </button>
             ))}
-          </div>
+          </nav>
         </motion.header>
       )}
     </AnimatePresence>
