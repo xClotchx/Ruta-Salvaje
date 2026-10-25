@@ -48,9 +48,9 @@ export const adventures: Adventure[] = [
     ],
     image: `${SUPABASE_STORAGE_URL}/Cira.JPG`,
     gallery: [
-      `${SUPABASE_STORAGE_URL}/choclon2.jpg`,
-      `${SUPABASE_STORAGE_URL}/choclon3.jpg`,
-      `${SUPABASE_STORAGE_URL}/choclon4.jpg`,
+      `${SUPABASE_STORAGE_URL}/Cira2.jpg`,
+      `${SUPABASE_STORAGE_URL}/Cira3.jpg`,
+      `${SUPABASE_STORAGE_URL}/Cira4.jpg`,
     ],
     accent: 'water',
   },
