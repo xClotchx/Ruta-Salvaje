@@ -26,6 +26,34 @@ export interface Adventure {
 const SUPABASE_STORAGE_URL = 'https://muisrdanimeszfmmyhhj.supabase.co/storage/v1/object/public/image';
 
 export const adventures: Adventure[] = [
+   {
+    id: 'cascada-Quebrada-Cira',
+    title: 'Cascada Quebrada Cira',
+    type: 'waterfall',
+    location: 'San Pablo Viejo / San Pablo Nuevo, distrito de David',
+    region: 'Chiriquí, Panamá',
+    coordinates: { x: 58, y: 52 },
+    date: '2026-09-18',
+    difficulty: 'Moderada',
+    distance: '2.5 km',
+    elevation: 'Aprox. 60 - 90 msnm',
+    duration: '45 Min',
+    description:
+      'Atrayente caída de agua formada por el cauce de la quebrada La Cira antes de su confluencia con el río San Pablo. El entorno combina senderos de campo, abundante sombra vegetal y formaciones rocosas que dan lugar a una refrescante poza natural en medio de la tranquilidad rural de David.',
+    highlights: [
+      'Sendero accesible con recorrido estimado de 45 minutos desde accesos en San Pablo',
+      'Entorno natural con avistamiento de aves y vegetación ribereña típica de tierras bajas chiricanas',
+      'Pozas naturales de agua fresca formadas sobre el lecho rocoso previo al río San Pablo',
+      'Es posible ver la antigua linea del ferrocarril que conectaba David con Boquete, ahora convertida en sendero de caminata',
+    ],
+    image: `${SUPABASE_STORAGE_URL}/Cira.JPG`,
+    gallery: [
+      `${SUPABASE_STORAGE_URL}/choclon2.jpg`,
+      `${SUPABASE_STORAGE_URL}/choclon3.jpg`,
+      `${SUPABASE_STORAGE_URL}/choclon4.jpg`,
+    ],
+    accent: 'water',
+  },
   {
     id: 'cascada-el-choclon',
     title: 'Cascada El Choclon',
