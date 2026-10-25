@@ -33,7 +33,7 @@ export const adventures: Adventure[] = [
     location: 'San Pablo Viejo / San Pablo Nuevo, distrito de David',
     region: 'Chiriquí, Panamá',
     coordinates: { x: 58, y: 52 },
-    date: '2026-09-18',
+    date: '2026-10-18',
     difficulty: 'Moderada',
     distance: '2.5 km',
     elevation: 'Aprox. 60 - 90 msnm',
